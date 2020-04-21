@@ -83,7 +83,7 @@ stages:
           useSameSourceVersion: false
           useCustomSourceVersion: false
           useSameBranch: false
-          branchToUse: '$(BillingE2EBranchName)'
+          branchToUse: 'zhuoli/e2e'
           waitForQueuedBuildsToFinish: true
           storeInEnvironmentVariable: false
           delayBetweenBuilds: '10'
