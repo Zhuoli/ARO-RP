@@ -77,7 +77,7 @@ stages:
       - task: TriggerBuild@3
         inputs:
           definitionIsInCurrentTeamProject: true
-          buildDefinition: '$(BillingE2EPipelineName)'
+          buildDefinition: 132293
           queueBuildForUserThatTriggeredBuild: true
           ignoreSslCertificateErrors: false
           useSameSourceVersion: false
