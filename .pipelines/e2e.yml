@@ -77,7 +77,7 @@ stages:
       - task: TriggerBuild@3
         inputs:
           definitionIsInCurrentTeamProject: true
-          buildDefinition: 132293
+          buildDefinition: 'INT - Billing - E2E'
           queueBuildForUserThatTriggeredBuild: true
           ignoreSslCertificateErrors: false
           useSameSourceVersion: false
