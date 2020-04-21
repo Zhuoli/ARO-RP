@@ -77,13 +77,13 @@ stages:
       - task: TriggerBuild@3
         inputs:
           definitionIsInCurrentTeamProject: true
-          buildDefinition: 'Billing - E2E'
+          buildDefinition: $(BillingE2EPipelineName)
           queueBuildForUserThatTriggeredBuild: true
           ignoreSslCertificateErrors: false
           useSameSourceVersion: false
           useCustomSourceVersion: false
           useSameBranch: false
-          branchToUse: 'master'
+          branchToUse: $(BillingE2EBranchName)
           waitForQueuedBuildsToFinish: true
           storeInEnvironmentVariable: false
           delayBetweenBuilds: '14400'
