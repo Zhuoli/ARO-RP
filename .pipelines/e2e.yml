@@ -86,7 +86,7 @@ stages:
           branchToUse: $(BillingE2EBranchName)
           waitForQueuedBuildsToFinish: true
           storeInEnvironmentVariable: false
-          delayBetweenBuilds: '14400'
+          delayBetweenBuilds: '10'
           buildParameters: 'CLUSTER_RESOURCEGROUP:$(CLUSTER_RESOURCEGROUP), CLUSTER:$(CLUSTER), REGION:$(REGION)'
           authenticationMethod: 'OAuth Token'
           password: '$(System.AccessToken)'
