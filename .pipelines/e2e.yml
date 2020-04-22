@@ -77,16 +77,16 @@ stages:
       - task: TriggerBuild@3
         inputs:
           definitionIsInCurrentTeamProject: true
-          buildDefinition: $(BillingE2EPipelineName)
+          buildDefinition: 'Billing - E2E'
           queueBuildForUserThatTriggeredBuild: true
           ignoreSslCertificateErrors: false
           useSameSourceVersion: false
           useCustomSourceVersion: false
           useSameBranch: false
-          branchToUse: $(BillingE2EBranchName)
+          branchToUse: 'master'
           waitForQueuedBuildsToFinish: true
           storeInEnvironmentVariable: false
-          delayBetweenBuilds: '21600'
+          delayBetweenBuilds: '14400'
           buildParameters: 'CLUSTER_RESOURCEGROUP:$(CLUSTER_RESOURCEGROUP), CLUSTER:$(CLUSTER), REGION:$(REGION)'
           authenticationMethod: 'OAuth Token'
           password: '$(System.AccessToken)'

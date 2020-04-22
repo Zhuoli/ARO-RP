@@ -6,8 +6,8 @@ package mirror
 import (
 	"encoding/json"
 	"fmt"
-	"mime"
 	"net/http"
+	"net/url"
 	"strings"
 )
 
@@ -17,13 +17,17 @@ type Node struct {
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
 }
 
-// AddFromGraph adds all nodes whose version is of the form x.y.z (no suffix)
-// and lies in the range [min, max)
-func AddFromGraph(min, max *Version) ([]Node, error) {
-	req, err := http.NewRequest(http.MethodGet, "https://openshift-release.svc.ci.openshift.org/graph", nil)
+func AddFromGraph(channel string, min Version) ([]Node, error) {
+	req, err := http.NewRequest(http.MethodGet, "https://api.openshift.com/api/upgrades_info/v1/graph", nil)
 	if err != nil {
 		return nil, err
 	}
+
+	req.URL.RawQuery = url.Values{
+		"channel": []string{fmt.Sprintf("%s-%d.%d", channel, min[0], min[1])},
+	}.Encode()
+
+	req.Header.Set("Accept", "application/json")
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -35,12 +39,7 @@ func AddFromGraph(min, max *Version) ([]Node, error) {
 		return nil, fmt.Errorf("unexpected status code %d", resp.StatusCode)
 	}
 
-	mediaType, _, err := mime.ParseMediaType(resp.Header.Get("Content-Type"))
-	if err != nil {
-		return nil, err
-	}
-
-	if mediaType != "application/vnd.redhat.cincinnati.graph+json" {
+	if resp.Header.Get("Content-Type") != "application/json" {
 		return nil, fmt.Errorf("unexpected content type %q", resp.Header.Get("Content-Type"))
 	}
 
@@ -56,14 +55,12 @@ func AddFromGraph(min, max *Version) ([]Node, error) {
 
 	releases := make([]Node, 0, len(g.Nodes))
 	for _, node := range g.Nodes {
-		version, err := ParseVersion(node.Version)
+		version, err := newVersion(node.Version)
 		if err != nil {
 			return nil, err
 		}
 
-		if version.Lt(min) ||
-			!version.Lt(max) ||
-			version.Suffix != "" {
+		if version.Lt(min) {
 			continue
 		}
 
