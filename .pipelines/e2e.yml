@@ -62,6 +62,7 @@ stages:
     displayName: Billing E2E
     jobs:
     - job: Delay_For_Billing_Table
+      timeoutInMinutes: 360
       pool: server
       steps:
       - task: Delay@1
