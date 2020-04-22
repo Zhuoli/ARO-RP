@@ -61,8 +61,16 @@ stages:
   - stage: Billing_E2E
     displayName: Billing E2E
     jobs:
+    - job: Delay_For_Billing_Table
+      pool: server
+      steps:
+      - task: Delay@1
+        inputs:
+          delayForMinutes: '360'
     - job: TriggerBillingBuild
       displayName: 'Trigger Billing E2E pipeline'
+      dependsOn:
+      - Delay_For_Billing_Table
       steps:
       - script: |
             # Pass variables between tasks: https://medium.com/microsoftazure/how-to-pass-variables-in-azure-pipelines-yaml-tasks-5c81c5d31763
@@ -86,7 +94,6 @@ stages:
           branchToUse: $(BillingE2EBranchName)
           waitForQueuedBuildsToFinish: true
           storeInEnvironmentVariable: false
-          delayBetweenBuilds: '21600'
           buildParameters: 'CLUSTER_RESOURCEGROUP:$(CLUSTER_RESOURCEGROUP), CLUSTER:$(CLUSTER), REGION:$(REGION)'
           authenticationMethod: 'OAuth Token'
           password: '$(System.AccessToken)'
