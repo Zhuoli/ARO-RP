@@ -14,6 +14,7 @@ import (
 	"github.com/sirupsen/logrus"
 
 	pkgmirror "github.com/Azure/ARO-RP/pkg/mirror"
+	"github.com/Azure/ARO-RP/pkg/util/version"
 )
 
 func getAuth(key string) (*types.DockerAuthConfig, error) {
@@ -58,9 +59,26 @@ func mirror(ctx context.Context, log *logrus.Entry) error {
 	}
 
 	log.Print("reading Cincinnati graph")
-	releases, err := pkgmirror.AddFromGraph(pkgmirror.NewVersion(4, 3), pkgmirror.NewVersion(4, 4))
+	releases, err := pkgmirror.AddFromGraph("stable", pkgmirror.Version{4, 3})
 	if err != nil {
 		return err
+	}
+
+	// ensure we mirror the version at which we are creating clusters, even if
+	// it isn't in the Cincinnati graph yet
+	var found bool
+	for _, release := range releases {
+		if release.Version == version.OpenShiftVersion {
+			found = true
+			break
+		}
+	}
+
+	if !found {
+		releases = append(releases, pkgmirror.Node{
+			Version: version.OpenShiftVersion,
+			Payload: version.OpenShiftPullSpec,
+		})
 	}
 
 	var errorOccurred bool
@@ -75,9 +93,7 @@ func mirror(ctx context.Context, log *logrus.Entry) error {
 
 	for _, ref := range []string{
 		"linuxgeneva-microsoft.azurecr.io/genevamdsd:master_266",
-		"linuxgeneva-microsoft.azurecr.io/genevamdsd:master_279",
 		"linuxgeneva-microsoft.azurecr.io/genevamdm:master_35",
-		"linuxgeneva-microsoft.azurecr.io/genevamdm:master_37",
 	} {
 		log.Printf("mirroring %s", ref)
 		err = pkgmirror.Copy(ctx, pkgmirror.Dest(dstAcr+".azurecr.io", ref), ref, dstauth, srcauthGeneva)
