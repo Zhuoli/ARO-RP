@@ -7,14 +7,11 @@ stages:
     displayName: 🚀 RUN RP E2E
     jobs:
     - job: ${{ LOCATION }}_E2E
-    dependsOn: Deploy_${{ LOCATION }}
-    variables:
-    - template: ../vars.yml
     timeoutInMinutes: 120
     pool:
         vmImage: ubuntu-latest
     steps:
-    - template: ./template-prod-e2e-steps.yml
+    - template: ./templates/template-prod-e2e-steps.yml
         parameters:
         gobin: ${{ variables.GOBIN }}
         gopath: ${{ variables.GOPATH }}
