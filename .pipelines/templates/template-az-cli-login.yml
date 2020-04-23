@@ -7,6 +7,7 @@ steps:
     [[ -z "${{ parameters.azureDevOpsJSONSPN }}" ]] && echo "azureDevOpsJSONSPN is Empty"
     cd ${{ parameters.workingDirectory }}
     base64 -d >devops-spn.json <<<${{ parameters.azureDevOpsJSONSPN }}
+    echo "Service principal name: $(jq -r .clientId <devops-spn.json)"
     az login --service-principal -u "$(jq -r .clientId <devops-spn.json)" -p "$(jq -r .clientSecret <devops-spn.json)" -t "$(jq -r .tenantId <devops-spn.json)" --allow-no-subscriptions >/dev/null
     rm devops-spn.json
   displayName: 🗝 AZ Login
