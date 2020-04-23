@@ -4,6 +4,7 @@ parameters:
 steps:
 - script: |
     set -e
+    [[ -z "${{ parameters.azureDevOpsJSONSPN }}" ]] && echo "azureDevOpsJSONSPN is Empty"
     cd ${{ parameters.workingDirectory }}
     base64 -d >devops-spn.json <<<${{ parameters.azureDevOpsJSONSPN }}
     az login --service-principal -u "$(jq -r .clientId <devops-spn.json)" -p "$(jq -r .clientSecret <devops-spn.json)" -t "$(jq -r .tenantId <devops-spn.json)" --allow-no-subscriptions >/dev/null
