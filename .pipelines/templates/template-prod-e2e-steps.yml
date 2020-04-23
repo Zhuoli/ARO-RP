@@ -37,7 +37,7 @@ steps:
 
     deploy_e2e_deps
     run_e2e
-  displayName: 🚀 Run ${{ parameters.location }} E2E
+  displayName: 🚀 Run RP E2E
 - script: |
     cd ${{ parameters.workingDirectory }}
 
