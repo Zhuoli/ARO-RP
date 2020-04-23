@@ -12,14 +12,14 @@ stages:
         vmImage: ubuntu-latest
     steps:
     - template: ./templates/template-prod-e2e-steps.yml
-        parameters:
-            gobin: ${{ variables.GOBIN }}
-            gopath: ${{ variables.GOPATH }}
-            goroot: ${{ variables.GOROOT }}
-            workingDirectory: ${{ variables.modulePath }}
-            location: $LOCATION
-            subscription: $e2e-subscription
-            azureDevOpsE2EJSONSPN: ${{ parameters.azureDevOpsE2EJSONSPN }}
+      parameters:
+        gobin: ${{ variables.GOBIN }}
+        gopath: ${{ variables.GOPATH }}
+        goroot: ${{ variables.GOROOT }}
+        workingDirectory: ${{ variables.modulePath }}
+        location: $LOCATION
+        subscription: $e2e-subscription
+        azureDevOpsE2EJSONSPN: ${{ parameters.azureDevOpsE2EJSONSPN }}
   - stage: Delay_For_Billing_Table
     displayName: Wait 6 hours for billing table ready
     jobs:
