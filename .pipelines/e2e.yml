@@ -70,11 +70,10 @@ stages:
           delayForMinutes: '360'
   - stage: Billing_E2E
     displayName: Billing E2E
+    dependsOn: Delay_For_Billing_Table 
     jobs:
     - job: TriggerBillingBuild
       displayName: 'Trigger Billing E2E pipeline'
-      dependsOn:
-      - Delay_For_Billing_Table
       steps:
       - script: |
             # Pass variables between tasks: https://medium.com/microsoftazure/how-to-pass-variables-in-azure-pipelines-yaml-tasks-5c81c5d31763
