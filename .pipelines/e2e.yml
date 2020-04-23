@@ -58,16 +58,19 @@ stages:
       - template: ./templates/template-clean-agent.yml
         parameters:
           workingDirectory: ${{ variables.modulePath }}
-  - stage: Billing_E2E
-    displayName: Billing E2E
+  - stage: Delay_For_Billing_Table
+    displayName: Wait 6 hours for billing table ready
     jobs:
-    - job: Delay_For_Billing_Table
+    - job: JustWait
       timeoutInMinutes: 360
       pool: server
       steps:
       - task: Delay@1
         inputs:
           delayForMinutes: '360'
+  - stage: Billing_E2E
+    displayName: Billing E2E
+    jobs:
     - job: TriggerBillingBuild
       displayName: 'Trigger Billing E2E pipeline'
       dependsOn:
