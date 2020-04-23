@@ -7,12 +7,12 @@ stages:
     displayName: 🚀 RUN RP E2E
     jobs:
     - job: ${{ LOCATION }}_E2E
-        timeoutInMinutes: 120
-        pool:
+      timeoutInMinutes: 120
+      pool:
         vmImage: ubuntu-latest
-        steps:
-        - template: ./templates/template-prod-e2e-steps.yml
-          parameters:
+      steps:
+      - template: ./templates/template-prod-e2e-steps.yml
+        parameters:
             gobin: ${{ variables.GOBIN }}
             gopath: ${{ variables.GOPATH }}
             goroot: ${{ variables.GOROOT }}
