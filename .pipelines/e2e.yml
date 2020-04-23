@@ -9,7 +9,7 @@ stages:
     - job: RP_E2E_Job
       timeoutInMinutes: 120
       pool:
-        vmImage: ubuntu-latest
+        name: ARO-E2E
       steps:
       - template: ./templates/template-prod-e2e-steps.yml
         parameters:
