@@ -6,7 +6,7 @@ stages:
     dependsOn: []
     displayName: 🚀 RUN RP E2E
     jobs:
-    - job: $LOCATION_E2E
+    - job: $(LOCATION)_E2E
       timeoutInMinutes: 120
       pool:
         vmImage: ubuntu-latest
